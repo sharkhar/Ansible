@@ -1,0 +1,37 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  tasks: 
+    - name: GET URL
+      uri:
+        url: "https://reqres.in/api/users?page=2"
+        method: GET
+        status_code: 200
+        return_content: yes
+        body_format: json
+      register: curl_out
+
+    - name: debug GET json
+      debug:
+        # msg: "{{curl_out.json}}"
+        var: curl_out.json
+         
+    - name: Create workspaces in Log analytics Azure
+      uri:
+        url: https://reqres.in/api/users
+        method: POST
+        body_format: json
+        status_code: [200, 201]
+        return_content: true
+          #headers:
+          #Content-Type: application/json
+        body:
+          name: morpheus
+          job: leader
+      register: post_out  
+       
+    - name: debug POST json
+      debug:
+        msg: "{{post_out.json}}"
+
