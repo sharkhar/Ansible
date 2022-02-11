@@ -1,0 +1,16 @@
+---
+- hosts: all 
+  gather_facts: no
+  become: yes
+  tasks:
+    #   - name: install git package
+    #  yum:
+    #   name: git
+
+    - name: Get updated files from git repository 
+      git: 
+        repo: "http://{{ githubuser | urlencode }}:{{ githubpassword | urlencode }}@10.15.15.253:3000/FINO/Esb_Properties.git"
+        dest: /tmp/code
+        version: Developers
+      notify:
+        - Restart apache
