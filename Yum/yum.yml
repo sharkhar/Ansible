@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: install and start apache
+      yum: 
+        name: http package install
+        state: latest
+      
+    - name: latest index.html file
+      template:
+        src: /files/index.html
+        dest: /var/www/html/
+        
+    - name: http is started
+      service: 
+        name: http
+        state: started 
